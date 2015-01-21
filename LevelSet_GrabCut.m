@@ -1,12 +1,15 @@
 function[]=LevelSet_GrabCut()
 
+global M N P  %RGB图像(M*N*P)=(512*512*3)
+
 Img=imread('1.jpg');
+[M,N,P]=size(Img);
 I=FillOutOfCircle(Img);
 U=LevelSet(I);
 
 
+trimap=ExpandBand(U);
 
-% trimap=ExpandBand(U);
 % 
 % 
 % % GrabCut
@@ -15,7 +18,7 @@ U=LevelSet(I);
 % rgb(:,:,3)=I;
 % outTrimap=GrabCut(rgb, trimap);
 % 
-% roi=(outTrimap==0 | outTrimap==2);  %取bg/pbg位置
+% roi=(outTrimap==0 |/|| outTrimap==2);  %取bg/pbg位置
 % Img(roi)=255;
 % imshow(Img);
 end

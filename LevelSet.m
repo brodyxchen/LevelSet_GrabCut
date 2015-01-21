@@ -82,22 +82,7 @@ imagesc(Img, [0, 255]);colormap(gray);hold on;%hold on 新绘制会叠加到原本图像上
 [c,h] = contour(u,[0 0],'r'); 
 totalIterNum=[num2str(n), ' iterations'];  
 title(['Final contour, ', totalIterNum]);
-outU=c;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-minu=min(min(u))
-maxu=max(max(u))
-
-minc=min(min(c))
-maxc=max(max(c))
-
-roi=(c>=(h-0.5) & c<=(h+0.5));
-outImg=zeros(512,512);
-outImg(roi)=128;
-
-
-
-figure;
-imshow(outImg,[]);
+outU=u;
 
 end
 

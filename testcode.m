@@ -1,6 +1,4 @@
-function testcode
-
-function s=contourdata(c)
+function s=testcode(c)  %contourdata(c)
 
 % S = CONTOURDATA(C) extracts the (x,y) data pairs describing each contour
 % line and other data from the contour matrix C. The vector array structure
