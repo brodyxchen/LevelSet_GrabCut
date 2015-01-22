@@ -1,24 +1,21 @@
 function[]=LevelSet_GrabCut()
 
+%addpath('C:\mexopencv-master')
+
+%{0:bg, 1:fg, 2:probably-bg, 3:probably-fg}
+
 global M N P  %RGBÕºœÒ(M*N*P)=(512*512*3)
 
-Img=imread('1.jpg');
-[M,N,P]=size(Img);
-I=FillOutOfCircle(Img);
-U=LevelSet(I);
+originImage=imread('1.jpg');
+[M,N,P]=size(originImage);
+originImage=originImage(:,:,1);  %ª“∂»Õº
+filledImage=FillOutOfCircle(originImage);
+mountainImage=LevelSet(filledImage);
 
+bandTrimap=ExpandBand(mountainImage);
 
-trimap=ExpandBand(U);
+resultImage=GrayGrabCut(filledImage, bandTrimap);
 
-% 
-% 
-% % GrabCut
-% rgb(:,:,1)=I;
-% rgb(:,:,2)=I;
-% rgb(:,:,3)=I;
-% outTrimap=GrabCut(rgb, trimap);
-% 
-% roi=(outTrimap==0 |/|| outTrimap==2);  %»°bg/pbgŒª÷√
-% Img(roi)=255;
-% imshow(Img);
+figure;
+imshow(resultImage);
 end
