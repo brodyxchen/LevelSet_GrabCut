@@ -9,7 +9,7 @@ rgb(:,:,1)=originImage;
 rgb(:,:,2)=originImage;
 rgb(:,:,3)=originImage;
 rgb=uint8(rgb);
-trimap=cv.grabCut(rgb, bandTrimap);
+trimap=mexGrayGrabCut(rgb, bandTrimap);
 
 roi=(trimap==1 | trimap==3);  %»°fg/pfgŒª÷√
 
