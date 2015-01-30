@@ -5,11 +5,14 @@ global M N P  %RGBÍ¼Ïñ(M*N*P)=(512*512*3)
 
 %{0:bg, 1:fg, 2:probably-bg, 3:probably-fg}
 
-rgb(:,:,1)=originImage;
-rgb(:,:,2)=originImage;
-rgb(:,:,3)=originImage;
-rgb=uint8(rgb);
-trimap=mexGrayGrabCut(rgb, bandTrimap);
+% rgb(:,:,1)=originImage;
+% rgb(:,:,2)=originImage;
+% rgb(:,:,3)=originImage;
+grayImage = originImage;
+grayImage=uint8(grayImage);
+whos grayImage
+
+trimap=mexGrayGrabCut(grayImage, bandTrimap, 'MaxIter', 1);
 
 roi=(trimap==1 | trimap==3);  %È¡fg/pfgÎ»ÖÃ
 
