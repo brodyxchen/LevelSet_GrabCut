@@ -10,7 +10,7 @@ originImage=imread('1.jpg');
 [M,N,P]=size(originImage);
 originImage=originImage(:,:,1);  %ª“∂»Õº
 filledImage=FillOutOfCircle(originImage);
-mountainImage=LevelSet(filledImage);
+mountainImage=LevelSet2(filledImage);  %LevelSet(filledImage) %LevelSet2(filledImage)
 
 bandTrimap=ExpandBand(mountainImage);
 

@@ -12,7 +12,7 @@ grayImage = originImage;
 grayImage=uint8(grayImage);
 whos grayImage
 
-trimap=mexGrayGrabCut(grayImage, bandTrimap, 'MaxIter', 1);
+trimap=mexGrayGrabCut(grayImage, bandTrimap, 'MaxIter', 10);
 
 roi=(trimap==1 | trimap==3);  %»°fg/pfgŒª÷√
 

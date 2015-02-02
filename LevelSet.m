@@ -4,48 +4,46 @@
 % Author: Chunming Li, all rights reserved.
 % E-mail: li_chunming@hotmail.com
 % URL:  http://www.engr.uconn.edu/~cmli/
+
 function outU = LevelSet(inI)
 % clear all;
 % close all;
 % Img = imread('1.jpg');  % synthetic noisy image
 % Img=double(Img(:,:,1)); %取第一层图像（RGB中的R，或者Gray中的Gray），并转换成double矩阵
 Img=double(inI);
+
+%% parameter setting
+timestep=200;  % time step
+mu=0.2/timestep;  %[4]中mu% coefficient of the internal (penalizing) energy term P(\phi) % Note: the product timestep*mu must be less than 0.25 for stability!
+iter = 300;
+
+lambda=5; %[6]中lambda % coefficient of the weighted length term Lg(\phi)
+alf=-3;   %[6]中alf（v） %+收缩，-扩散 % coefficient of the weighted area term Ag(\phi); % Note: Choose a positive(negative) alf if the initial contour is outside(inside) the object.
+epsilon=1.5; %[11]中epsilon % the papramater in the definition of smoothed Dirac function
+
 sigma=1.5;    % scale parameter in Gaussian kernel for smoothing
 G=fspecial('gaussian',15,sigma);
 Img_smooth=conv2(Img,G,'same');  % smooth image by Gaussiin convolution
 [Ix,Iy]=gradient(Img_smooth);
 f=Ix.^2+Iy.^2;  %梯度模的平方
-
 g=1./(1+f);  %公式[5.1] edge indicator function. %梯度倒数矩阵，梯度越大，值越小
 
-
-
-timestep=200;  % time step
-%[4]
-mu=0.2/timestep;  %[4]中mu% coefficient of the internal (penalizing) energy term P(\phi) % Note: the product timestep*mu must be less than 0.25 for stability!
-%[6]
-lambda=5; %[6]中lambda % coefficient of the weighted length term Lg(\phi)
-alf=-3;   %[6]中alf（v） %+收缩，-扩散 % coefficient of the weighted area term Ag(\phi); % Note: Choose a positive(negative) alf if the initial contour is outside(inside) the object.
-%[11]
-epsilon=1.5; %[11]中epsilon % the papramater in the definition of smoothed Dirac function
-
-
+%% Init begin area
 % define initial level set function (LSF) as -c0, 0, c0 at points outside, on
 % the boundary, and inside of a region R, respectively.
-[nrow, ncol]=size(Img);  
-
 c0=4;
+[nrow, ncol]=size(Img);  
 initialLSF=c0*ones(nrow,ncol);
-w=8;%初始的闭合动态曲线位置（距边界位置）
 
+w=8;%初始的闭合动态曲线位置（距边界位置）
 %左边
 initialLSF(300:350, 150:200)=0;
 initialLSF(301:349, 151:199)=-c0;
-
 %右边
 initialLSF(270:300, 370:400)=0;
 initialLSF(271:299, 371:399)=-c0;
 
+u=initialLSF;
 % initialLSF(w+1:end-w, w+1:end-w)=0;  % zero level set is on the boundary of R. 
                                      % Note: this can be commented out. The intial LSF does NOT necessarily need a zero level set.
                                      
@@ -59,14 +57,14 @@ initialLSF(271:299, 371:399)=-c0;
 %           4  0  0  0  0  0  0  4
 %           4  4  4  4  4  4  4  4
 
-u=initialLSF;
+
+%% main area
 figure;imagesc(Img, [0, 255]);colormap(gray);hold on;%hold on 新绘制会叠加到原本图像上
 [c,h] = contour(u,[0 0],'r');                          
 title('Initial contour');
 
-
 % start level set evolution
-for n=1:300
+for n=1:iter
     u=EVOLUTION(u, g ,lambda, mu, alf, epsilon, timestep, 1);      
     if mod(n,20)==0     %每20次迭代绘制一次图像
         pause(0.001);
@@ -144,13 +142,7 @@ end
 
 end
 
-% the following functions are called by the main function EVOLUTION
-% x 是矩阵，sigma是数，f是矩阵
-function f = Dirac(x, sigma)        %公式[11] 狄拉克函数(冲击函数)：只处理一定数据范围内的数据
-f=(1/2/sigma)*(1+cos(pi*x/sigma));
-b = (x>=-sigma) & (x<=sigma);   % b 是bool 矩阵  判断矩阵x中每个元素是不是在（-sigma,sigma）范围内
-f = f.*b;   %把f中 在矩阵b中位置=false 的数据清0
-end
+
 
 % nx 是矩阵  ny 是矩阵
 function K = curvature_central(nx,ny) %曲率中心
@@ -160,16 +152,24 @@ K=nxx+nyy;
 
 end
 
-% f 是矩阵  g 是矩阵
+%% the following functions are called by the main function EVOLUTION
+% x 是矩阵，sigma是数，f是矩阵
+function f = Dirac(x, sigma)        %公式[11] 狄拉克函数(冲击函数)：只处理一定数据范围内的数据
+f=(1/2/sigma)*(1+cos(pi*x/sigma));
+b = (x>=-sigma) & (x<=sigma);   % b 是bool 矩阵  判断矩阵x中每个元素是不是在（-sigma,sigma）范围内
+f = f.*b;   %把f中 在矩阵b中位置=false 的数据清0
+end
+
+%% f 是矩阵  g 是矩阵
 function g = NeumannBoundCond(f)
 % Make a function satisfy Neumann boundary condition 边界处理
 [nrow,ncol] = size(f);
 g = f;
-% g([1 nrow],[1 ncol]) = g([3 nrow-2],[3 ncol-2]);  
-% g([1 nrow],2:end-1) = g([3 nrow-2],2:end-1);          
-% g(2:end-1,[1 ncol]) = g(2:end-1,[3 ncol-2]);     
-g([1 nrow],[1 ncol]) = g([30 nrow-29],[30 ncol-29]);  
-g([1 nrow],2:end-1) = g([30 nrow-29],2:end-1);          
-g(2:end-1,[1 ncol]) = g(2:end-1,[30 ncol-29]);   
+g([1 nrow],[1 ncol]) = g([3 nrow-2],[3 ncol-2]);  
+g([1 nrow],2:end-1) = g([3 nrow-2],2:end-1);          
+g(2:end-1,[1 ncol]) = g(2:end-1,[3 ncol-2]);     
+% g([1 nrow],[1 ncol]) = g([30 nrow-29],[30 ncol-29]);  
+% g([1 nrow],2:end-1) = g([30 nrow-29],2:end-1);          
+% g(2:end-1,[1 ncol]) = g(2:end-1,[30 ncol-29]);   
 end
 
