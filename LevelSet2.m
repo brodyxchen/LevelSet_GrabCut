@@ -9,7 +9,7 @@
 %         li_chunming@hotmail.com 
 % URL:  http://www.imagecomputing.org/~cmli/
 
-function outU = LevelSet2(inI)
+function outU = LevelSet2(inI, preLSF)
 % clear all;
 % close all;
 % Img=imread('gourd.bmp');
@@ -17,10 +17,10 @@ function outU = LevelSet2(inI)
 Img=double(inI);
 
 %% parameter setting
-timestep=300;  % time step
+timestep=30;  % time step
 mu=0.2/timestep;  % coefficient of the distance regularization term R(phi)
 iter_inner=5;
-iter_outer=60;
+iter_outer=5;
 
 lambda=5; % coefficient of the weighted length term L(phi)
 alfa=-3;  % coefficient of the weighted area term A(phi)
@@ -36,14 +36,14 @@ g=1./(1+f);  % edge indicator function.
 %% Init begin area
 % initialize LSF as binary step function
 c0=4;
-initialLSF = c0*ones(size(Img));
+% initialLSF = c0*ones(size(Img));
 
 % generate the initial region R0 as two rectangles
 % initialLSF(25:35,20:25)=-c0; 
 % initialLSF(25:35,40:50)=-c0;
-initialLSF(250:300, 120:170)=-c0;
-initialLSF(270:300, 370:400)=-c0;
-
+% initialLSF(250:300, 120:170)=-c0;
+% initialLSF(270:300, 370:400)=-c0;
+initialLSF=-1*c0*preLSF;
 phi=initialLSF;
 
 % figure(1);

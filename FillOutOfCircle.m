@@ -11,6 +11,6 @@ r=min(M,N)/2;
 circle=(x.^2 + y.^2) >= r^2;
 % roi=find(circle>=1); 
 roi=(circle>=1);
-filledImage(roi)=192;  %Ìî³ä°×É«
+filledImage(roi)=255;  %Ìî³ä°×É«
 % imshow(I);
 end
