@@ -6,7 +6,7 @@ function[]=LevelSet_GrabCut()
 
 global M N P  %RGBÍ¼Ïñ(M*N*P)=(512*512*3)
 
-originImage=imread('1.jpg');
+originImage=imread('CT000167.jpg');
 [M,N,P]=size(originImage);
 originImage=originImage(:,:,1);  %»Ò¶ÈÍ¼
 filledImage=FillOutOfCircle(originImage);
