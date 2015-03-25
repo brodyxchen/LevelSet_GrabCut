@@ -16,13 +16,26 @@ image=originImage;
 pointR1=256;
 pointC1=130;
 pointR2=256;
-pointC2=350;
+pointC2=390;
 diff= 16;
+
+disp('BFS-time=');
+tic;
 mask = BFS(image, pointR1,pointC1, pointR2, pointC2, diff);
+toc;
+
+% show mask
+mask2=255*ones(M,N);
+roi=mask==1;
+mask2(roi)=0;
+figure;
+imshow(mask2);title('mask2')
 
 % Morphology
+disp('Morphology-time=');
+tic;
 LSF=Morphology(mask);
-
+toc;
 
 
 % ÃÓ≥‰‘≤Õ‚«¯”Ú
@@ -41,5 +54,5 @@ resultImage=GrayGrabCut(filledImage, bandTrimap);
 
 
 figure;
-imshow(resultImage);
+imshow(resultImage);title('resultImage')
 end
