@@ -54,9 +54,9 @@ phi=initialLSF;
 
 
 %% main area
-figure(2);
-imagesc(Img,[0, 255]); axis off; axis equal; colormap(gray); hold on;  contour(phi, [0,0], 'r');
-title('Initial zero level contour');
+% figure(2);
+% imagesc(Img,[0, 255]); axis off; axis equal; colormap(gray); hold on;  contour(phi, [0,0], 'r');
+% title('Initial zero level contour');
 % pause(0.5);
 
 
@@ -72,10 +72,10 @@ end
 % start level set evolution
 for n=1:iter_outer
     phi = drlse_edge(phi, g, lambda, mu, alfa, epsilon, timestep, iter_inner, potentialFunction);    
-    if mod(n,2)==0
-        figure(2);
-        imagesc(Img,[0, 255]); axis off; axis equal; colormap(gray); hold on;  contour(phi, [0,0], 'r');
-    end
+%     if mod(n,2)==0
+%         figure(2);
+%         imagesc(Img,[0, 255]); axis off; axis equal; colormap(gray); hold on;  contour(phi, [0,0], 'r');
+%     end
 end
 
 % refine the zero level contour by further level set evolution with alfa=0
@@ -84,11 +84,11 @@ iter_refine = 10;
 phi = drlse_edge(phi, g, lambda, mu, alfa, epsilon, timestep, iter_inner, potentialFunction);
 
 finalLSF=phi;
-figure(2);
-imagesc(Img,[0, 255]); axis off; axis equal; colormap(gray); hold on;  contour(phi, [0,0], 'r');
-hold on;  contour(phi, [0,0], 'r');
-str=['Final zero level contour, ', num2str(iter_outer*iter_inner+iter_refine), ' iterations'];
-title(str);
+% figure(2);
+% imagesc(Img,[0, 255]); axis off; axis equal; colormap(gray); hold on;  contour(phi, [0,0], 'r');
+% hold on;  contour(phi, [0,0], 'r');
+% str=['Final zero level contour, ', num2str(iter_outer*iter_inner+iter_refine), ' iterations'];
+% title(str);
 
 % figure;
 % mesh(-finalLSF); % for a better view, the LSF is displayed upside down

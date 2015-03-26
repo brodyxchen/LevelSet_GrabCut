@@ -34,9 +34,9 @@ for i=1:1:k
    binG2=imerode(binG2,B2);         %实际是对白色腐蚀，对黑色就是膨胀
 end
 
-figure;
-imshow(binG2); title('binG2')
-figure;
+% figure;
+% imshow(binG2); title('binG2')
+% figure;
 
 
 binG3=binG2;
@@ -44,9 +44,9 @@ for i=1:1:k+7
     binG3=imdilate(binG3,B2);          %%实际是对白色膨胀，对黑色就是腐蚀
 end
 
-figure;
-imshow(binG3); title('binG3')
-figure;
+% figure;
+% imshow(binG3); title('binG3')
+% figure;
 
 
 

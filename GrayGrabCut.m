@@ -10,7 +10,6 @@ global M N P  %RGBÍ¼Ïñ(M*N*P)=(512*512*3)
 % rgb(:,:,3)=originImage;
 grayImage = originImage;
 grayImage=uint8(grayImage);
-whos grayImage
 
 trimap=mexGrayGrabCut(grayImage, bandTrimap, 'MaxIter', 10);
 

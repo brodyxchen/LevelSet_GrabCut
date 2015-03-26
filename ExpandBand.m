@@ -51,7 +51,7 @@ roi=(circle>=1);
 bandTrimap(roi)=0;  %bg=0
 
 
-
-figure;
-imshow(bandTrimap,[]);
+% 
+% figure;
+% imshow(bandTrimap,[]);
 end

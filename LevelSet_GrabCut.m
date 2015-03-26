@@ -6,7 +6,7 @@ function[]=LevelSet_GrabCut()
 
 global M N P  %RGBÍ¼Ïñ(M*N*P)=(512*512*3)
 
-originImage=imread('CT000167.jpg');
+originImage=imread('CT000145.jpg');
 [M,N,P]=size(originImage);
 originImage=originImage(:,:,1);  %»Ò¶ÈÍ¼
 
@@ -19,7 +19,7 @@ pointR2=256;
 pointC2=390;
 diff= 16;
 
-disp('BFS-time=');
+disp('BFS=');
 tic;
 mask = BFS(image, pointR1,pointC1, pointR2, pointC2, diff);
 toc;
@@ -28,11 +28,11 @@ toc;
 mask2=255*ones(M,N);
 roi=mask==1;
 mask2(roi)=0;
-figure;
-imshow(mask2);title('mask2')
+% figure;
+% imshow(mask2);title('mask2')
 
 % Morphology
-disp('Morphology-time=');
+disp('Morphology=');
 tic;
 LSF=Morphology(mask);
 toc;
@@ -42,17 +42,25 @@ toc;
 filledImage=FillOutOfCircle(originImage);
 
 % LevelSet
+disp('LevelSet=');
+tic;
 mountainImage=LevelSet2(filledImage, LSF);  %LevelSet(filledImage) %LevelSet2(filledImage)
-
+toc;
 
 % Õ­´ø
+disp('Expand=');
+tic;
 bandTrimap=ExpandBand(mountainImage);
+toc;
 
-% grayCut
+
+% GrayCut
+disp('GrayCut=');
+tic;
 resultImage=GrayGrabCut(filledImage, bandTrimap);
+toc
 
 
-
-figure;
-imshow(resultImage);title('resultImage')
+% figure;
+% imshow(resultImage);title('resultImage')
 end
